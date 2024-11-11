@@ -25,7 +25,7 @@ exports.CreateCollab = async (req, res) => {
 
 exports.GetCollabs = async (req, res) => {
   try {
-    const collabs = await Collab.find().populate("postedBy", "name role");
+    const collabs = await Collab.find().populate("postedBy", "name role img");
     res.json(collabs);
   } catch (err) {
     console.error(err.message);
