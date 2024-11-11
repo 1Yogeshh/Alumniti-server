@@ -16,7 +16,7 @@ app.use(express.urlencoded({
   extended:true
 }))
 databaseconnection();
-app.use(cors({ origin: 'https://alumniti-app.vercel.app', credentials: true }));
+app.use(cors({ origin: ['https://alumniti-app.vercel.app','http://localhost:3000'], credentials: true }));
 app.use(express.json());
 app.use(cookieParser()); 
 
