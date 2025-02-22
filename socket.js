@@ -5,7 +5,7 @@ let io;
 const initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: ["https://alumniti-app.vercel.app", "http://localhost:3000"],
+      origin: ["http://localhost:3000"],
       credentials: true,
     },
   });
@@ -15,6 +15,7 @@ const initializeSocket = (server) => {
 
     socket.on("sendMessage", (data) => {
       io.emit("receiveMessage", data);
+      console.log(data);
     });
 
     socket.on("disconnect", () => {
