@@ -1,36 +1,41 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors')
-const databaseconnection= require('./config/db.js')
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const fs = require('fs');
-const router = require('./routes/userroutes.js')
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const databaseconnection = require("./config/db.js");
+const cookieParser = require("cookie-parser");
+const router = require("./routes/userroutes.js");
+const http = require("http");
+const { initializeSocket } = require("./socket"); // Import socket setup
+
 dotenv.config();
 
+const app = express();
+const server = http.createServer(app); // Create HTTP server
 
-const app =express();
-
-app.use(express.urlencoded({
-  extended:true
-}))
+app.use(express.urlencoded({ extended: true }));
 databaseconnection();
-app.use(cors({ origin: ['https://alumniti-app.vercel.app','http://localhost:3000'], credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 
-//route
-app.use('/api/auth', router);
+// Routes
+app.use("/api/auth", router);
+
+// Initialize Socket.IO
+initializeSocket(server);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-app.get('*',(req,res,next)=>{
-  res.status(200).json({
-    message:'bad request'
-  })
-})
+app.get("*", (req, res, next) => {
+  res.status(200).json({ message: "bad request" });
+});
